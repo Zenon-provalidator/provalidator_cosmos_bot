@@ -6,9 +6,9 @@
 
 ## 1. Invite @ProvalidatorCosmosBot
 
-## 2. Enter command coin name 
+## 2. Enter command name 
 
-### ex) /cosmos
+### ex) /staked
 
 ## bot shows coin's information.
 ⚛️ Cosmos(Atom)
