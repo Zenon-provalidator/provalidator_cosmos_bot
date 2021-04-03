@@ -14,7 +14,7 @@ bot.startPolling()
 let msgArr = new Array()//save msg array
 
 //cosmos
-bot.command('staked', (ctx) =>{
+bot.command('staking', (ctx) =>{
 	//delete existing message
 	if(typeof msgArr[ctx.chat.id] != 'undefined'){
 		bot.telegram.deleteMessage(ctx.chat.id, msgArr[ctx.chat.id]).catch(err=>{
