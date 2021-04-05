@@ -8,7 +8,7 @@
 
 ## 2. Enter command name 
 
-### ex) /staked
+### ex) /staking
 
 ## bot shows coin's information.
 ⚛️ Cosmos(Atom)
