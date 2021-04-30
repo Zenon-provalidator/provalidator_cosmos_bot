@@ -25,7 +25,7 @@ function getMessage(coin){
 		
 		if(coin == 'cosmos'){
 			let cosmosInfo = getCosmosInfo()
-			msg = `⚛️ <b>Cosmos(Atom)</b>\nㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ\n\n`
+			msg = `⚛️ <b>Cosmos (Atom)</b>\nㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ\n\n`
 			if( wdate <  cdate) {
 				maxTokens = (cosmosInfo.max_tokens/ 1000000).toFixed(0)
 				stakedTokens = (cosmosInfo.bonded_tokens / 1000000 ).toFixed(0)
@@ -51,7 +51,7 @@ function getMessage(coin){
 			msg += `🥩<b>Staking</b>\n\n`
 			msg += `🔐Staked : ${numberWithCommas(stakedTokens)} (${stakedPercent}%)\n\n🔓Unstaked : ${numberWithCommas(notStakedTokens)} (${notStakedPercent}%)\n\n⛓️Max Sply : ${numberWithCommas(maxTokens)} (100%)`
 			msg += `\n\nㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ\n`
-			msg += `Supported by <b>Provalidator</b>\n`
+			msg += `Supported by <a href='https://provalidator.com' target='_blank'>Provalidator</a>\n`
 		}	
 
 		return msg
