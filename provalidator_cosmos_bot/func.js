@@ -25,7 +25,7 @@ function getMessage(coin){
 		
 		if(coin == 'cosmos'){
 			let cosmosInfo = getCosmosInfo()
-			msg = `⚛️ <b>Cosmos (Atom)</b>\nㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ\n\n`
+			msg = `⚛️ <b>Cosmos (ATOM)</b>\nㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ\n\n`
 			if( wdate <  cdate) {
 				price = getCosmosPrice()
 				maxTokens = (cosmosInfo.max_tokens/ 1000000).toFixed(0)
