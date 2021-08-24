@@ -27,6 +27,7 @@ function getMessage(coin){
 			let cosmosInfo = getCosmosInfo()
 			msg = `⚛️ <b>Cosmos (Atom)</b>\nㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ\n\n`
 			if( wdate <  cdate) {
+				price = getCosmosPrice()
 				maxTokens = (cosmosInfo.max_tokens/ 1000000).toFixed(0)
 				stakedTokens = (cosmosInfo.bonded_tokens / 1000000 ).toFixed(0)
 				stakedPercent = (stakedTokens / maxTokens * 100).toFixed(0)
@@ -34,6 +35,7 @@ function getMessage(coin){
 				notStakedPercent = (notStakedTokens / maxTokens * 100).toFixed(0)
 				prvTokens = (getProvalidator() / 1000000).toFixed(0)
 				let wJson = {
+					"price" : price,
 					"maxTokens" : maxTokens,
 					"stakedTokens" : stakedTokens,
 					"stakedPercent" : stakedPercent,
@@ -44,6 +46,7 @@ function getMessage(coin){
 				}
 				fs.writeFileSync(file, JSON.stringify(wJson))
 			}else{
+				price = rJson.price
 				maxTokens = rJson.maxTokens
 				stakedTokens = rJson.stakedTokens
 				stakedPercent = rJson.stakedPercent
@@ -52,6 +55,7 @@ function getMessage(coin){
 				prvTokens = rJson.prvTokens
 			}
 			msg += `🥩<b>Staking</b>\n\n`
+			msg += `💰Price: $${price}\n\n`
 			msg += `🔐Staked: ${numberWithCommas(stakedTokens)} (${stakedPercent}%)\n\n`
 			msg += `🔓Unstaked: ${numberWithCommas(notStakedTokens)} (${notStakedPercent}%)\n\n`
 			msg += `⛓️Max Sply: ${numberWithCommas(maxTokens)} (100%)\n\n`
@@ -76,6 +80,12 @@ function getProvalidator(){
 	let json = fetch(process.env.COSMOS_API_URL+"/staking/validator/Provalidator").json()
 	return json.tokens
 }
+
+function getCosmosPrice(){
+	let json = fetch('https://api.coingecko.com/api/v3/simple/price?ids=cosmos&vs_currencies=usd').json()
+	return json.cosmos.usd
+}
+
 function getCosmosInfo(){
 	let json = fetch(process.env.COSMOS_API_URL+"/status").json()
 	let returnArr = { 
@@ -92,8 +102,6 @@ function getCosmosInfo(){
 	}
 	return returnArr	
 }
-
-console.log(getMessage('cosmos'))
 
 module.exports = {
 	getMessage : getMessage
