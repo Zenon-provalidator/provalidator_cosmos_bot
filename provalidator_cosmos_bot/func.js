@@ -33,7 +33,10 @@ function getMessage(coin){
 				stakedPercent = (stakedTokens / maxTokens * 100).toFixed(0)
 				notStakedTokens = maxTokens - stakedTokens
 				notStakedPercent = (notStakedTokens / maxTokens * 100).toFixed(0)
-				prvTokens = (getProvalidator() / 1000000).toFixed(0)
+				prvDetail = getProvalidatorDetail()//get provalidator detail info
+				prvRate = (prvDetail.rate * 100)
+				prvTokens = (prvDetail.tokens/ 1000000).toFixed(0)
+				
 				let wJson = {
 					"price" : price,
 					"maxTokens" : maxTokens,
@@ -42,6 +45,7 @@ function getMessage(coin){
 					"notStakedTokens" : notStakedTokens,
 					"notStakedPercent" : notStakedPercent,
 					"prvTokens" : prvTokens,
+					"prvRate" :  prvRate,
 					"wdate" : new Date().getTime()
 				}
 				fs.writeFileSync(file, JSON.stringify(wJson))
@@ -52,6 +56,7 @@ function getMessage(coin){
 				stakedPercent = rJson.stakedPercent
 				notStakedTokens = rJson.notStakedTokens
 				notStakedPercent = rJson.notStakedPercent
+				prvRate = rJson.prvRate
 				prvTokens = rJson.prvTokens
 			}
 			msg += `🥩<b>Staking</b>\n\n`
@@ -59,7 +64,9 @@ function getMessage(coin){
 			msg += `🔐Staked: ${numberWithCommas(stakedTokens)} (${stakedPercent}%)\n\n`
 			msg += `🔓Unstaked: ${numberWithCommas(notStakedTokens)} (${notStakedPercent}%)\n\n`
 			msg += `⛓️Max Sply: ${numberWithCommas(maxTokens)} (100%)\n\n`
-			msg += `❤️Staked to <b>Provalidator</b>: ${numberWithCommas(prvTokens)}\n\n`
+			msg += `<b>Stake ATOM with ❤️Provalidator</b>\n\n`
+			msg += `<b>🔖Commission: ${prvRate}%</b>\n\n`
+			msg += `<b>🤝Staked: ${numberWithCommas(prvTokens)}</b>\n\n`
 			msg += `ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ\n`
 			msg += `Supported by <a href='https://provalidator.com' target='_blank'>Provalidator</a>\n`
 		}	
@@ -74,11 +81,6 @@ function getMessage(coin){
 
 function numberWithCommas(x) {
 	return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-}
-
-function getProvalidator(){
-	let json = fetch(process.env.COSMOS_API_URL+"/staking/validator/Provalidator").json()
-	return json.tokens
 }
 
 function getCosmosPrice(){
@@ -102,7 +104,20 @@ function getCosmosInfo(){
 	}
 	return returnArr	
 }
+function getProvalidatorDetail(){
+	let json = fetch(process.env.COSMOS_API_URL+"/staking/validators").json()
+	let obj = {};
+	for(var i in json){
+		if(process.env.PROVALIDATOR_OPERATER_ADDRESS === json[i].operator_address){			
+			obj.rank = json[i].rank
+			obj.rate = json[i].rate
+			obj.tokens = json[i].tokens
+		}
+	}
+	return obj	
+}
 
 module.exports = {
-	getMessage : getMessage
+	getMessage : getMessage,
+	getProvalidatorDetail : getProvalidatorDetail
 }
