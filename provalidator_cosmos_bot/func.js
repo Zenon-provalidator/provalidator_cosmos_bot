@@ -61,8 +61,7 @@ function getMessage(coin){
 			}
 			msg += `🥩<b>Staking</b>\n\n`
 			msg += `💰Price: $${price}\n\n`
-			msg += `🔐Staked: ${numberWithCommas(stakedTokens)} (${stakedPercent}%)\n\n`
-			msg += `🔓Unstaked: ${numberWithCommas(notStakedTokens)} (${notStakedPercent}%)\n\n`
+			msg += `🔐Staked: ${numberWithCommas(stakedTokens)} (${stakedPercent}%) / 🔓Unstaked: ${numberWithCommas(notStakedTokens)} (${notStakedPercent}%)\n\n`
 			msg += `⛓️Max Sply: ${numberWithCommas(maxTokens)} (100%)\n\n`
 			msg += `<b>Stake ATOM with ❤️Provalidator</b>\n\n`
 			msg += `<b>🔖Commission: ${prvRate}%</b>\n\n`
