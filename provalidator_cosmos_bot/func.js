@@ -34,6 +34,7 @@ function getMessage(coin){
 				notStakedTokens = maxTokens - stakedTokens
 				notStakedPercent = (notStakedTokens / maxTokens * 100).toFixed(0)
 				prvDetail = getProvalidatorDetail()//get provalidator detail info
+				prvRank = prvDetail.rank
 				prvRate = (prvDetail.rate * 100)
 				prvTokens = (prvDetail.tokens/ 1000000).toFixed(0)
 				
@@ -44,6 +45,7 @@ function getMessage(coin){
 					"stakedPercent" : stakedPercent,
 					"notStakedTokens" : notStakedTokens,
 					"notStakedPercent" : notStakedPercent,
+					"prvRank" : prvRank,
 					"prvTokens" : prvTokens,
 					"prvRate" :  prvRate,
 					"wdate" : new Date().getTime()
@@ -65,6 +67,7 @@ function getMessage(coin){
 //			msg += `🔐Staked: ${numberWithCommas(stakedTokens)} (${stakedPercent}%) / 🔓Unstaked: ${numberWithCommas(notStakedTokens)} (${notStakedPercent}%)\n\n`
 			msg += `⛓️Max Sply: ${numberWithCommas(maxTokens)} (100%)\n\n`
 			msg += `<b>Stake ATOM with ❤️Provalidator</b>\n\n`
+			msg += `<b>🏆Validator Ranking: #${prvRank}</b>\n\n`
 			msg += `<b>🔖Commission: ${prvRate}%</b>\n\n`
 			msg += `<b>🤝Staked: ${numberWithCommas(prvTokens)}</b>\n\n`
 			msg += `ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ\n`
