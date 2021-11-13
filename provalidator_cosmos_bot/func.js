@@ -108,7 +108,7 @@ function getProposal(num){
 	let prvRank = prvDetail.rank
 	let prvRate = (prvDetail.rate * 100)
 	let prvTokens = (prvDetail.tokens/ 1000000).toFixed(0)
-	let msg = `<b>⚛️ COSMOS ($ATOM) Governance</b>\n` 
+	let msg = `<b>⚛️ Cosmos Governance</b>\n` 
 	msg += `ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ\n\n`
 	msg += `<b>🗳️Proposal</b>\n\n`
 	msg += `#${num} ${title}\n\n`
