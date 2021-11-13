@@ -66,7 +66,7 @@ function getMessage(coin){
 			msg += `🔐Staked: ${stakedPercent}% / 🔓Unstaked: ${notStakedPercent}%\n\n`
 //			msg += `🔐Staked: ${numberWithCommas(stakedTokens)} (${stakedPercent}%) / 🔓Unstaked: ${numberWithCommas(notStakedTokens)} (${notStakedPercent}%)\n\n`
 			msg += `⛓️Max Sply: ${numberWithCommas(maxTokens)} (100%)\n\n`
-			msg += `<b>Stake ATOM with ❤️Provalidator</b>\n\n`
+			msg += `<b>Stake $ATOM with ❤️Provalidator</b>\n\n`
 			msg += `<b>🏆Validator Ranking: #${prvRank}</b>\n\n`
 			msg += `<b>🔖Commission: ${prvRate}%</b>\n\n`
 			msg += `<b>🤝Staked: ${numberWithCommas(prvTokens)}</b>\n\n`
@@ -114,7 +114,7 @@ function getProposal(num){
 	msg += `#${num} ${title}\n\n`
 	msg += `📌<a href='https://www.mintscan.io/cosmos/proposals/${num}'>https://www.mintscan.io/cosmos/proposals/${num}</a>\n\n`
 	msg += `🔍For other proposal search, please use [/proposal 🔢 ]\n\n`
-	msg += `<b>Stake ATOM with ❤️Provalidator</b>\n\n`
+	msg += `<b>Stake $ATOM with ❤️Provalidator</b>\n\n`
 	msg += `<b>🏆Validator Ranking: #${prvRank}</b>\n\n`
 	msg += `<b>🔖Commission: ${prvRate}%</b>\n\n`
 	msg += `<b>🤝Staked: ${numberWithCommas(prvTokens)}</b>\n\n`
