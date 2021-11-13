@@ -113,7 +113,7 @@ function getProposal(num){
 	msg += `<b>🗳️Proposal</b>\n\n`
 	msg += `#${num} ${title}\n\n`
 	msg += `📌<a href='https://www.mintscan.io/cosmos/proposals/${num}'>https://www.mintscan.io/cosmos/proposals/${num}</a>\n\n`
-	msg += `🔍If you search for other proposals [/proposal number]\n\n`
+	msg += `🔍For other proposal search, please use [/proposal 🔢 ]\n\n`
 	msg += `<b>Stake ATOM with ❤️Provalidator</b>\n\n`
 	msg += `<b>🏆Validator Ranking: #${prvRank}</b>\n\n`
 	msg += `<b>🔖Commission: ${prvRate}%</b>\n\n`
