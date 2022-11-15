@@ -76,13 +76,13 @@ bot.command('proposal', (ctx) =>{
 	}
 })
 //loop
-//const botJob = new CronJob(`*/60 * * * * *`, async function () {
-//	let latestProposal = func.getLatestProposalNum() //latest Proposal	
-//
-//	if(latestProposal !== 0 ){
-//		let callProposalNum = latestProposal+1
-//		let getProposal = func.getProposalFromServer(callProposalNum)
-//		
+const botJob = new CronJob(`*/60 * * * * *`, async function () {
+	let latestProposal = func.getLatestProposalNum() //latest Proposal	
+
+	if(latestProposal !== 0 ){
+		let callProposalNum = latestProposal+1
+		let getProposal = func.getProposalFromServer(callProposalNum)
+		
 //		if(typeof getProposal === "object"){
 //			let msg = `<b>⚛️ COSMOS ($ATOM) Governance</b>\n` 
 //			msg += `ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ\n\n`
@@ -98,8 +98,8 @@ bot.command('proposal', (ctx) =>{
 //		} else{
 //			logger.error(`server error`)
 //		}
-//	}else{
-//		logger.error(`latestProposal is 0`)
-//	}
-//	
-//}).start()
+	}else{
+		logger.error(`latestProposal is 0`)
+	}
+	
+}).start()
