@@ -22,12 +22,13 @@ function getMessage(coin){
 		let rJson = fs.existsSync(file) ? JSON.parse(fs.readFileSync(file)) : ''
 		var wdate = fs.existsSync(file) ? parseInt(rJson.wdate) + (60 * 1000) : 0
 		var cdate = parseInt(new Date().getTime())
-		
 		if(coin == 'cosmos'){
 			let cosmosInfo = getCosmosInfo()
 			msg = `⚛️ <b>Cosmos ($ATOM)</b>\nㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ\n\n`
 			if( wdate <  cdate) {
-				price = getCosmosPrice()
+				price = getPrice()
+				priceUsd = price[0].toFixed(2)
+				priceKrw = price[1].toFixed(0)
 				maxTokens = (cosmosInfo.max_tokens/ 1000000).toFixed(0)
 				stakedTokens = (cosmosInfo.bonded_tokens / 1000000 ).toFixed(0)
 				stakedPercent = (stakedTokens / maxTokens * 100).toFixed(0)
@@ -39,7 +40,8 @@ function getMessage(coin){
 				prvTokens = (prvDetail.tokens/ 1000000).toFixed(0)
 				
 				let wJson = {
-					"price" : price,
+					"priceUsd" : priceUsd,
+					"priceKrw" : priceKrw,
 					"maxTokens" : maxTokens,
 					"stakedTokens" : stakedTokens,
 					"stakedPercent" : stakedPercent,
@@ -52,7 +54,8 @@ function getMessage(coin){
 				}
 				fs.writeFileSync(file, JSON.stringify(wJson))
 			}else{
-				price = rJson.price
+				priceUsd = rJson.priceUsd
+				priceKrw = rJson.priceKrw
 				maxTokens = rJson.maxTokens
 				stakedTokens = rJson.stakedTokens
 				stakedPercent = rJson.stakedPercent
@@ -62,7 +65,7 @@ function getMessage(coin){
 				prvTokens = rJson.prvTokens
 			}
 			msg += `🥩<b>Staking</b>\n\n`
-			msg += `💰Price: $${price}\n\n`
+			msg += `💰Price: $${priceUsd}\n\n`
 			msg += `🔐Staked: ${stakedPercent}% / 🔓Unstaked: ${notStakedPercent}%\n\n`
 //			msg += `🔐Staked: ${numberWithCommas(stakedTokens)} (${stakedPercent}%) / 🔓Unstaked: ${numberWithCommas(notStakedTokens)} (${notStakedPercent}%)\n\n`
 			msg += `⛓️Max Sply: ${numberWithCommas(maxTokens)} (100%)\n\n`
@@ -185,38 +188,82 @@ function numberWithCommas(x) {
 	return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
 }
 
-function getCosmosPrice(){
-	let json = fetch('https://api.coingecko.com/api/v3/simple/price?ids=cosmos&vs_currencies=usd').json()
-	return json.cosmos.usd
+function getPrice(){
+	let json = fetch('https://api.coingecko.com/api/v3/simple/price?ids=cosmos&vs_currencies=usd,krw').json()
+	return [json.cosmos.usd, json.cosmos.krw]
+}
+
+function getRank(sortData,obj){
+	var rank =0
+	sortData.sort(function(a, b){
+		return b.tokens - a.tokens
+	})
+	for (var i=0; i< sortData.length; i++){
+		sortData[i].rank = i
+		if(sortData[i].operator_address == obj.operator_address){
+			rank = i +1
+		}
+	}
+	return rank > 0 ? rank +1 : rank
 }
 
 function getCosmosInfo(){
-	let json = fetch(process.env.COSMOS_API_URL+"/status").json()
+	let json = fetch(process.env.COSMOS_API_URL+"/staking/pool").json()
 	let returnArr = { 
-		'bonded_tokens' : json.bonded_tokens,
-		'not_bonded_tokens' : json.not_bonded_tokens,
+		'bonded_tokens' : json.result.bonded_tokens,
+		'not_bonded_tokens' : json.result.not_bonded_tokens,
 		'max_tokens' :''
 	}
-	
-	for(var j in json.total_circulating_tokens.supply){
-		if(json.total_circulating_tokens.supply[j].denom == 'uatom'){
-			returnArr.max_tokens = json.total_circulating_tokens.supply[j].amount
-			break
-		}
-	}
-	return returnArr	
+	returnArr.max_tokens = getsMaxTokens("uatom")
+	//console.log(returnArr)
+	return returnArr
+//	let json = fetch(process.env.COSMOS_API_URL+"/status").json()
+//	let returnArr = { 
+//		'bonded_tokens' : json.bonded_tokens,
+//		'not_bonded_tokens' : json.not_bonded_tokens,
+//		'max_tokens' :''
+//	}
+//	
+//	for(var j in json.total_circulating_tokens.supply){
+//		if(json.total_circulating_tokens.supply[j].denom == 'uatom'){
+//			returnArr.max_tokens = json.total_circulating_tokens.supply[j].amount
+//			break
+//		}
+//	}
+//	return returnArr	
 }
+function getsMaxTokens(denom){	
+	let json = fetch(process.env.COSMOS_API_URL+"/cosmos/bank/v1beta1/supply/"+denom).json()
+	return json.amount.amount
+}
+
 function getProvalidatorDetail(){
-	let json = fetch(process.env.COSMOS_API_URL+"/staking/validators").json()
-	let obj = {};
-	for(var i in json){
-		if(process.env.PROVALIDATOR_OPERATER_ADDRESS === json[i].operator_address){			
-			obj.rank = json[i].rank
-			obj.rate = json[i].rate
-			obj.tokens = json[i].tokens
+	let j = fetch(process.env.COSMOS_API_URL+"/staking/validators").json()
+	let obj = {}
+	let sortData = []
+	//console.log(j)
+	for(var i in j.result){
+		json = j.result[i]
+		sortData.push({operator_address : json.operator_address,tokens : json.tokens})
+		if(process.env.PROVALIDATOR_OPERATER_ADDRESS === json.operator_address){
+			obj.operator_address = json.operator_address
+			obj.rate = json.commission.commission_rates.rate
+			obj.tokens = json.tokens
 		}
 	}
+	obj.rank = getRank(sortData,obj)
+	
 	return obj	
+//	let json = fetch(process.env.COSMOS_API_URL+"/staking/validators").json()
+//	let obj = {};
+//	for(var i in json){
+//		if(process.env.PROVALIDATOR_OPERATER_ADDRESS === json[i].operator_address){			
+//			obj.rank = json[i].rank
+//			obj.rate = json[i].rate
+//			obj.tokens = json[i].tokens
+//		}
+//	}
+//	return obj	
 }
 
 module.exports = {
