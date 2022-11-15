@@ -100,7 +100,8 @@ function getProposal(num){
 		}
 	} else {
 		//proposal is not fixed
-		if(jsonLocal.status === "PROPOSAL_STATUS_PASSED" || jsonLocal.status === "PROPOSAL_STATUS_REJECTED"){
+		//if(jsonLocal.status === "PROPOSAL_STATUS_PASSED" || jsonLocal.status === "PROPOSAL_STATUS_REJECTED"){
+		if(jsonLocal.status === 3 || jsonLocal.status === 4){
 			title = jsonLocal.title
 		} else{
 			let jsonServer = getProposalFromServer(num) //get server data
@@ -127,18 +128,18 @@ function getProposal(num){
 }
 
 function getProposalFromServer(num){ //write Proposal json
-	let json = fetch(process.env.COSMOS_API_URL+"/gov/proposal/"+num).json()
+	let json = fetch(process.env.COSMOS_API_URL+"/gov/proposals/"+num).json()
 	let file = './json/proposals/' + num + '.json'
 	let wJson = {}
-	//logger.info(json)
+//	console.log(json.result.content.value.title)
 	
 	try{
-		if(typeof json.proposal_id !== "undefined"){
+		if(typeof json.result.id !== "undefined"){
 			wJson = {
-				"id" : json.proposal_id, 
-				"title" : json.title, 
-				"desc" : json.description, 
-				"status" : json.proposal_status
+				"id" : json.result.id, 
+				"title" : json.result.content.value.title, 
+				"desc" : json.result.content.value.description, 
+				"status" : json.result.status
 			}
 			fs.writeFileSync(file, JSON.stringify(wJson))
 			return wJson

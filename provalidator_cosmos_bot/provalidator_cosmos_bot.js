@@ -77,7 +77,7 @@ bot.command('proposal', (ctx) =>{
 })
 //loop
 //const botJob = new CronJob(`*/60 * * * * *`, async function () {
-//	let latestProposal = func.getLatestProposalNum() //latest Proposal
+//	let latestProposal = func.getLatestProposalNum() //latest Proposal	
 //
 //	if(latestProposal !== 0 ){
 //		let callProposalNum = latestProposal+1
